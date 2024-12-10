@@ -3,6 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Phone, Mail, MapPin } from 'lucide-react'
 
+import MutableDialog from "@/components/mutable-dialog"
+import { UserForm } from "./user-form"
+import { userFormSchema, UserFormData } from "@/app/actions/schemas"
+import { updateUser } from "@/app/actions/actions" // Add update user action
+
 interface User {
   id: string
   name: string
@@ -13,9 +18,27 @@ interface User {
 
 interface UserCardProps {
   user: User
+  onUserUpdate: (updatedUser: User) => void // Callback to handle updates
 }
 
-export function UserCard({ user }: UserCardProps) {
+export function UserCard({ user, onUserUpdate }: UserCardProps) {
+  const handleUpdateUser = async (data: UserFormData) => {
+    try {
+      const updatedUser = await updateUser(user.id, data)
+      onUserUpdate(updatedUser) // Notify parent of changes
+      return {
+        success: true,
+        message: `User ${updatedUser.name} updated successfully`,
+        data: updatedUser
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Failed to update user"
+      }
+    }
+  }
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="flex flex-row items-center gap-4">
@@ -46,6 +69,23 @@ export function UserCard({ user }: UserCardProps) {
           </div>
         )}
       </CardContent>
+      <div className="p-4 flex justify-end">
+        <MutableDialog<UserFormData>
+          formSchema={userFormSchema}
+          FormComponent={UserForm}
+          action={handleUpdateUser}
+          defaultValues={{
+            name: user.name,
+            phoneNumber: user.phoneNumber,
+            email: user.email || "",
+            location: user.location || "",
+          }}
+          triggerButtonLabel="Edit"
+          editDialogTitle="Edit User"
+          dialogDescription="Modify the user details and save changes."
+          submitButtonLabel="Save"
+        />
+      </div>
     </Card>
   )
 }

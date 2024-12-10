@@ -25,6 +25,10 @@ export default function UserSearch() {
     setSelectedUser(option ? option.user : null)
   }
 
+  const handleUserUpdate = (updatedUser: User) => {
+    setSelectedUser(updatedUser) // Update the state with new user details
+  }
+
   return (
     <div className="space-y-6">
       <AsyncSelect
@@ -34,7 +38,7 @@ export default function UserSearch() {
         placeholder="Search for a user..."
         className="w-full max-w-md mx-auto"
       />
-      {selectedUser && <UserCard user={selectedUser} />}
+      {selectedUser && <UserCard user={selectedUser} onUserUpdate={handleUserUpdate} />}
     </div>
   )
 }

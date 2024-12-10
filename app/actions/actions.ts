@@ -2,6 +2,7 @@
 'use server'
 
 import { User, userSchema } from './schemas'
+import { UserFormData } from './schemas'; // Add this import
 
 const users: User[] = [
     { id: '1', name: 'John Doe', phoneNumber: '123-456-7890', email: 'john@example.com' },
@@ -24,4 +25,24 @@ export async function addUser(data: Omit<User, 'id'>): Promise<User> {
   const validatedUser = userSchema.parse(newUser)
   users.push(validatedUser)
   return validatedUser
+}
+
+export async function updateUser(userId: string, data: UserFormData): Promise<User> {
+  const userIndex = users.findIndex(user => user.id === userId)
+  if (userIndex === -1) {
+    throw new Error("User not found")
+  }
+
+  const updatedUser = { ...users[userIndex], ...data }
+  const validatedUser = userSchema.parse(updatedUser)
+  users[userIndex] = validatedUser
+  return validatedUser
+}
+
+export async function deleteUser(userId: string): Promise<void> {
+  const userIndex = users.findIndex(user => user.id === userId)
+  if (userIndex === -1) {
+    throw new Error("User not found")
+  }
+  users.splice(userIndex, 1) // Remove the user from the array
 }
