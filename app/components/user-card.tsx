@@ -8,6 +8,9 @@ import { UserForm } from "./user-form"
 import { userFormSchema, UserFormData } from "@/app/actions/schemas"
 import { updateUser } from "@/app/actions/actions" // Add update user action
 
+import { Trash2 } from 'lucide-react' // Add an icon for the delete button
+import { deleteUser } from "@/app/actions/actions";
+
 interface User {
   id: string
   name: string
@@ -18,7 +21,7 @@ interface User {
 
 interface UserCardProps {
   user: User
-  onUserUpdate: (updatedUser: User) => void // Callback to handle updates
+  onUserUpdate: (updatedUser: User | null) => void; // Callback to handle updates
 }
 
 export function UserCard({ user, onUserUpdate }: UserCardProps) {
@@ -39,16 +42,36 @@ export function UserCard({ user, onUserUpdate }: UserCardProps) {
     }
   }
 
+  const handleDeleteUser = async () => {
+      try {
+        await deleteUser(user.id); // Call the delete function
+        onUserUpdate(null); // Notify parent to remove user from state
+        alert(`User ${user.name} deleted successfully`);
+      } catch (error) {
+        alert("Failed to delete user");
+      }
+    };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="flex flex-row items-center gap-4">
         <Avatar className="w-16 h-16">
-          <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${user.name}`} alt={user.name} />
-          <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+          <AvatarImage
+            src={`https://api.dicebear.com/6.x/initials/svg?seed=${user.name}`}
+            alt={user.name}
+          />
+          <AvatarFallback>
+            {user.name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")}
+          </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
           <CardTitle className="text-2xl">{user.name}</CardTitle>
-          <Badge variant="secondary" className="w-fit mt-1">ID: {user.id}</Badge>
+          <Badge variant="secondary" className="w-fit mt-1">
+            ID: {user.id}
+          </Badge>
         </div>
       </CardHeader>
       <CardContent className="grid gap-4">
@@ -69,7 +92,7 @@ export function UserCard({ user, onUserUpdate }: UserCardProps) {
           </div>
         )}
       </CardContent>
-      <div className="p-4 flex justify-end">
+      <div className="p-4 flex justify-end gap-2">
         <MutableDialog<UserFormData>
           formSchema={userFormSchema}
           FormComponent={UserForm}
@@ -85,7 +108,14 @@ export function UserCard({ user, onUserUpdate }: UserCardProps) {
           dialogDescription="Modify the user details and save changes."
           submitButtonLabel="Save"
         />
+        <button
+          className="text-red-600 hover:text-red-800 flex items-center gap-2"
+          onClick={handleDeleteUser}
+        >
+          <Trash2 className="w-4 h-4" />
+          Delete
+        </button>
       </div>
     </Card>
-  )
+  );
 }

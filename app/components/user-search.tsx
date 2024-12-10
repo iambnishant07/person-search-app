@@ -25,9 +25,10 @@ export default function UserSearch() {
     setSelectedUser(option ? option.user : null)
   }
 
-  const handleUserUpdate = (updatedUser: User) => {
-    setSelectedUser(updatedUser) // Update the state with new user details
+  const handleUserUpdate = (updatedUser: User | null) => {
+    setSelectedUser(updatedUser) // Set null when user is deleted
   }
+  
 
   return (
     <div className="space-y-6">
