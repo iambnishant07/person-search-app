@@ -16,9 +16,9 @@ datasource db {
 }
 
 model User {
-  id          String  @id @default(cuid())
+  id          String  @id @default(uuid()) // Use UUIDs for unique IDs
   name        String  @db.VarChar(255)
-  email       String  @unique // Mandatory email
+  email       String? @unique // Email is optional but unique if provided
   phoneNumber String  @unique
-  location    String? // Optional location
+  location    String?
 }

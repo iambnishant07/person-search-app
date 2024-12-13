@@ -11,13 +11,14 @@ import { updateUser } from "@/app/actions/actions" // Add update user action
 import { Trash2 } from 'lucide-react' // Add an icon for the delete button
 import { deleteUser } from "@/app/actions/actions";
 
-interface User {
-  id: string
-  name: string
-  phoneNumber: string
-  email?: string
-  location?: string
+export interface User {
+  id: string;
+  name: string;
+  phoneNumber: string;
+  email?: string;
+  location?: string | null; // Allow null for location
 }
+
 
 interface UserCardProps {
   user: User
@@ -27,20 +28,27 @@ interface UserCardProps {
 export function UserCard({ user, onUserUpdate }: UserCardProps) {
   const handleUpdateUser = async (data: UserFormData) => {
     try {
-      const updatedUser = await updateUser(user.id, data)
-      onUserUpdate(updatedUser) // Notify parent of changes
+      const updatedUser = await updateUser(user.id, data);
+  
+      // Normalize the location field
+      const normalizedUser = {
+        ...updatedUser,
+        location: updatedUser.location ?? undefined, // Convert null to undefined
+      };
+  
+      onUserUpdate(normalizedUser); // Notify parent of changes
       return {
         success: true,
-        message: `User ${updatedUser.name} updated successfully`,
-        data: updatedUser
-      }
+        message: `User ${normalizedUser.name} updated successfully`,
+        data: normalizedUser,
+      };
     } catch (error) {
       return {
         success: false,
-        message: "Failed to update user"
-      }
+        message: "Failed to update user",
+      };
     }
-  }
+  };  
 
   const handleDeleteUser = async () => {
       try {

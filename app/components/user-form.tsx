@@ -13,7 +13,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { UserFormData } from '../actions/schemas'
 
-
 interface FormComponentProps {
   form: UseFormReturn<UserFormData>
 }
@@ -28,16 +27,16 @@ export function UserForm({ form }: FormComponentProps) {
           <FormItem>
             <FormLabel>Name</FormLabel>
             <FormControl>
-              <Input placeholder="John Doe" {...field} />
+              <Input placeholder="John Doe" {...field} value={field.value ?? ''} />
             </FormControl>
             <FormDescription>
               Enter full name.
             </FormDescription>
             {fieldState.error && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {String(fieldState.error) || ''}
-                            </p>
-                        ) }
+              <p className="text-red-600 text-sm mt-1">
+                {String(fieldState.error.message) || ''}
+              </p>
+            )}
           </FormItem>
         )}
       />
@@ -48,16 +47,21 @@ export function UserForm({ form }: FormComponentProps) {
           <FormItem>
             <FormLabel>Email</FormLabel>
             <FormControl>
-              <Input type="email" placeholder="john@example.com" {...field} />
+              <Input
+                type="email"
+                placeholder="john@example.com"
+                {...field}
+                value={field.value ?? ''} // Normalize null to an empty string
+              />
             </FormControl>
             <FormDescription>
               Enter email address.
             </FormDescription>
             {fieldState.error && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {String(fieldState.error) || ''}
-                            </p>
-                        ) }
+              <p className="text-red-600 text-sm mt-1">
+                {String(fieldState.error.message) || ''}
+              </p>
+            )}
           </FormItem>
         )}
       />
@@ -68,16 +72,16 @@ export function UserForm({ form }: FormComponentProps) {
           <FormItem>
             <FormLabel>Phone Number</FormLabel>
             <FormControl>
-              <Input placeholder="123-456-7890" {...field} />
+              <Input placeholder="123-456-7890" {...field} value={field.value ?? ''} />
             </FormControl>
             <FormDescription>
               Enter phone number in Australian phone number format.
             </FormDescription>
             {fieldState.error && (
-                            <p className="text-red-600 text-sm mt-1">
-                                {String(fieldState.error) || ''}
-                            </p>
-                        ) }
+              <p className="text-red-600 text-sm mt-1">
+                {String(fieldState.error.message) || ''}
+              </p>
+            )}
           </FormItem>
         )}
       />

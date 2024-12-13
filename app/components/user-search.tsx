@@ -18,8 +18,16 @@ export default function UserSearch() {
 
   const loadOptions = async (inputValue: string): Promise<Option[]> => {
     const users = await searchUsers(inputValue)
-    return users.map(user => ({ value: user.id, label: user.name, user }))
-  }
+  
+    return users.map(user => ({
+      value: user.id,
+      label: user.name,
+      user: {
+        ...user,
+        location: user.location === null ? undefined : user.location, // Ensure location is never null
+      } as User, // Explicitly cast to User to ensure type compatibility
+    }))
+  }     
 
   const handleChange = (option: Option | null) => {
     setSelectedUser(option ? option.user : null)
@@ -28,7 +36,6 @@ export default function UserSearch() {
   const handleUserUpdate = (updatedUser: User | null) => {
     setSelectedUser(updatedUser) // Set null when user is deleted
   }
-  
 
   return (
     <div className="space-y-6">
