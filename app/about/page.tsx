@@ -4,7 +4,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Twitter } from 'lucide-react'
+import { Github, Linkedin, Twitter, X } from 'lucide-react'
 
 export default function AboutPage() {
   return (
@@ -37,7 +37,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="mb-4">
-              Hi, I&apos;m <code>Callum Bir</code>, the developer behind Person Search. I&apos;m passionate about creating 
+              Hi, I&apos;m <code>Nishant Bhattarai</code>, the developer behind Person Search. I&apos;m passionate about creating 
               efficient, user-friendly web applications using the latest technologies.
             </p>
             <p className="mb-4">
@@ -46,18 +46,18 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Button asChild>
-                <Link href="https://www.linkedin.com/in/callumbir/" target="_blank" rel="noopener noreferrer">
+                <Link href="https://www.linkedin.com/in/iambnishant007/" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
                 </Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="https://github.com/gocallum" target="_blank" rel="noopener noreferrer">
+                <Link href="https://github.com/iambnishant07" target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-4 w-4" /> GitHub
                 </Link>
               </Button>
               <Button asChild variant="secondary">
-                <Link href="https://x.com/callumbir">
-                  <Twitter className="mr-2 h-4 w-4" /> Contact Me
+                <Link href="https://x.com/iamb_nishant">
+                  <X className="mr-2 h-4 w-4" /> Contact Me
                 </Link>
               </Button>
             </div>
